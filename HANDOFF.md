@@ -6,65 +6,88 @@ Dokumen ini dibuat supaya sesi Claude Code baru (di PC lain) langsung punya kont
 
 ## 1. Ringkasan cepat
 
-| Project | Repo GitHub | Peran | Status | Commit lokal terbaru |
-|---|---|---|---|---|
-| `kusuma-agro` | [farahaufahwdh-creator/kusuma-agro](https://github.com/farahaufahwdh-creator/kusuma-agro.git) | Situs publik statis Kusuma Agrowisata (HTML+JS vanilla) | Direview + di-audit UI/UX. **Tidak ada perubahan kode** (keputusan user: isi konten jadi tugas admin) | — (working tree bersih, ikuti commit repo asli) |
-| `kusuma-agro-backend` | [farahaufahwdh-creator/kusuma-agro-backend](https://github.com/farahaufahwdh-creator/kusuma-agro-backend.git) | REST API backend untuk `kusuma-agro` (CodeIgniter 3, legacy) | **Di-hardening** — semua endpoint tulis sekarang wajib token | `d671e78` |
-| `kusuma-agro-frontend` | [farahaufahwdh-creator/kusuma-agro-frontend](https://github.com/farahaufahwdh-creator/kusuma-agro-frontend.git) | Dashboard admin gabungan (`Login.html`, 1 file) untuk kelola Agro + ID + Industri | **Di-hardening** — login sungguhan ke server, bukan hardcoded lagi | `1d50e6c` |
-| `kusuma-id-admin` | [farahaufahwdh-creator/kusuma-id-admin](https://github.com/farahaufahwdh-creator/kusuma-id-admin.git) | Situs publik **kusuma.id** + CMS admin + API jadi 1 (CodeIgniter 4). **Ini yang rencananya menggantikan www.kusuma.id, target deploy ke cPanel** | **Di-hardening penuh** + **landing page corporate & repo dibersihkan** (bagian 12), sudah ada `DEPLOY.md` | `f7f49b6` |
-| `kusuma-industri` | [farahaufahwdh-creator/kusuma-industri](https://github.com/farahaufahwdh-creator/kusuma-industri.git) | Situs publik "Kusuma Agro Industri"/SIIPLAH + CMS admin jadi 1 (CodeIgniter 4, pola sama `kusuma-id-admin`) | **Di-hardening penuh**, termasuk bersihkan data test live | `ddfb389` + `5e24422` |
+| Project | Peran | Status | Initial commit |
+|---|---|---|---|
+| `kusuma-agro` | Situs publik statis Kusuma Agrowisata (HTML+JS vanilla) | Direview + di-audit UI/UX. **Tidak ada perubahan kode** (keputusan user: isi konten jadi tugas admin) | `5e1afac` |
+| `kusuma-agro-backend` | REST API backend untuk `kusuma-agro` (CodeIgniter 3, legacy) | **Di-hardening** — semua endpoint tulis sekarang wajib token | `ba3d7f5` |
+| `kusuma-agro-frontend` | Dashboard admin gabungan (`Login.html`, 1 file) untuk kelola Agro + ID + Industri | **Di-hardening** — login sungguhan ke server, bukan hardcoded lagi | `aa59639` |
+| `kusuma-id-admin` | Situs publik **kusuma.id** + CMS admin + API jadi 1 (CodeIgniter 4). **Ini yang rencananya menggantikan www.kusuma.id, target deploy ke cPanel** | **Di-hardening penuh** + **landing page corporate** (bagian 12), sudah ada `DEPLOY.md` | `94b3af8` |
+| `kusuma-industri` | Situs publik "Kusuma Agro Industri"/SIIPLAH + CMS admin jadi 1 (CodeIgniter 4, pola sama `kusuma-id-admin`) | **Di-hardening penuh** + data test dibersihkan + gambar dikompres | `497b2a1` |
 
-Semua 5 repo di branch `main`, tidak ada branch lain. **Semua commit di atas LOKAL SAJA, belum ada satupun yang di-push ke GitHub** — lihat bagian 2 untuk alasan & cara pindahnya.
+Semua 5 repo di branch **`main`**, working tree bersih, satu *initial commit* masing-masing.
 
-> **24 Agustus 2026**: `kusuma-id-admin` sudah di-commit `f7f49b6` — perbaikan landing page corporate + pembersihan repo, lihat **bagian 12**. Working tree bersih.
+> ### 🔴 BELUM ADA SATUPUN YANG DI-PUSH
+> Kelima repo **belum punya `origin`** dan seluruh hasil kerja HANYA ada di harddisk PC ini. Ini risiko terbesar saat ini — pekerjaan di project ini sudah pernah hilang sekali karena hal serupa.
 >
-> **RENCANA REPO BARU**: repo ini akan dipindah ke kepemilikan Kusuma (repo baru), **riwayat commit dipertahankan** (keputusan user 24 Agustus). Langkah & konsekuensinya ada di bagian 2.
+> **Yang perlu dilakukan manusia**: buat GitHub Organization Kusuma + 5 repo kosong + Personal Access Token. Langkah lengkap di **bagian 2b**.
+
+> **Riwayat lama sudah dibuang secara sengaja** (24 Agustus 2026). Repo asal milik pribadi anak magang (`farahaufahwdh-creator/...`) dan riwayatnya memuat data pribadi mereka. Kelima repo di-`git init` ulang supaya bersih. Bundle cadangan riwayat lama ada di folder sementara — lihat **bagian 2a**.
 
 ---
 
 ## 2. Pindah repo ke kepemilikan Kusuma + pindah PC
 
-### 2a. Rencana repo baru (keputusan 24 Agustus 2026)
+### 2a. Repo sudah di-init ulang — SIAP di-push ke repo Kusuma (24 Agustus 2026)
 
-Keempat repo yang diubah `origin`-nya masih menunjuk LANGSUNG ke repo asli anak magang (`farahaufahwdh-creator/...`), bukan fork sendiri — push ke situ akan mengubah repo orang lain. **Rencananya: buat repo baru milik Kusuma, ganti `origin`, lalu push.**
+**SUDAH DIKERJAKAN**: kelima repo di-`git init` ulang dari nol. Riwayat lama (milik repo pribadi anak magang) sudah dibuang seluruhnya, diganti satu *initial commit* per project yang menjelaskan kondisi & alasan.
 
-**Keputusan: riwayat commit DIPERTAHANKAN** (bukan `git init` dari nol).
+Alasan tidak sekadar ganti `origin`: riwayat lama memuat data pribadi anak magang (nama **Farah**, email **farahaufahwdh@gmail.com** di `index (3).html`, foto grup, 3 screenshot layar pribadi berisi tab browser & pendaftaran beasiswa). Menghapus filenya saja tidak cukup — di git semuanya tetap bisa diambil dari commit lama. Untuk repositori milik perusahaan, riwayat bersih lebih berharga daripada jejak 9 commit yang sudah terdokumentasi lengkap di dokumen ini.
 
-> ⚠️ **Konsekuensi yang sudah disadari & diterima**: file pribadi anak magang tetap bisa diambil dari RIWAYAT commit meski filenya sudah dihapus di commit `f7f49b6`. Yang ada di history commit `09a8562` & `39b8021`:
-> - `index (3).html` — berisi nama **Farah** dan email **farahaufahwdh@gmail.com**
-> - `evaluasi_pembelajaran.sql`, `index.html`, `index (2).html` — tugas kuliah pribadi
-> - Foto grup anak magang + 3 screenshot layar pribadinya (tab browser, pendaftaran beasiswa)
-> - Folder `Admin/` duplikat 16 MB
->
-> Kalau suatu saat repo Kusuma ini mau dibuka ke publik atau diaudit, riwayatnya perlu dibersihkan dulu pakai `git filter-repo`/BFG (semua hash commit akan berubah). Untuk repo privat internal, risikonya kecil.
+**Hasil sampingan**: repo jadi jauh lebih ramping karena versi lama foto-foto besar ikut terbuang.
 
-**Langkah ganti remote** (per repo, setelah repo baru dibuat di akun/organisasi Kusuma):
+| Repo | Commit | Sebelum | Sesudah |
+|---|---|---|---|
+| `kusuma-agro` | `5e1afac` | — | 506 KB |
+| `kusuma-agro-backend` | `ba3d7f5` | — | 7,8 MB |
+| `kusuma-agro-frontend` | `aa59639` | — | 462 KB |
+| `kusuma-id-admin` | `94b3af8` | 48 MB | **11 MB** |
+| `kusuma-industri` | `497b2a1` | 261 MB | **19 MB** |
+
+Semua di branch **`main`**, working tree bersih, **belum ada `origin`** — tinggal disambungkan.
+
+> 💾 **Riwayat lama TIDAK hilang permanen.** Sudah dicadangkan sebagai git bundle (153 MB) di folder scratchpad sesi:
+> `…\scratchpad\git_history_backup\<nama-repo>.bundle`
+> Pulihkan dengan `git clone <nama>.bundle <folder>` kalau suatu saat butuh. **Folder scratchpad bersifat sementara** — salin ke tempat aman kalau riwayat lama masih dianggap perlu.
+
+### 2b. Langkah menyambungkan ke GitHub (BELUM dikerjakan)
+
+**Yang harus dilakukan manusia lebih dulu:**
+1. **Buat GitHub Organization untuk Kusuma** — bukan repo di akun pribadi. Ini justru inti masalahnya: repo lama menempel di akun pribadi anak magang yang sudah tidak di sini. Organization membuat repo dimiliki perusahaan, akses anggota bisa dicabut/ditambah tanpa memindahkan repo. Paket **Free** cukup (repo privat tanpa batas).
+2. **Buat 5 repo KOSONG** di org itu: `kusuma-id-admin`, `kusuma-industri`, `kusuma-agro`, `kusuma-agro-backend`, `kusuma-agro-frontend`. Set **Private**. **Jangan** centang "Add a README" — harus benar-benar kosong supaya push pertama tidak konflik.
+3. **Buat Personal Access Token**: GitHub → Settings → Developer settings → Personal access tokens → **Tokens (classic)** → scope **`repo`**. Token cuma muncul sekali, simpan baik-baik.
+
+**Lalu jalankan per repo:**
 ```bash
-git remote -v                                    # catat origin lama
-git remote set-url origin <URL-repo-Kusuma-baru>
-git remote -v                                    # pastikan sudah berubah
+git remote add origin https://github.com/<org-kusuma>/<nama-repo>.git
 git push -u origin main
 ```
-Butuh autentikasi GitHub dulu (Personal Access Token atau SSH key) — belum pernah di-setup di PC manapun sejauh ini.
 
-### 2b. Pindah PC (selama repo baru belum dibuat)
+Belum ada `gh` CLI, SSH key, maupun credential helper di PC ini — otentikasi akan diminta saat push pertama (username GitHub + token sebagai password).
 
-**4 folder yang WAJIB disalin dengan folder `.git`-nya** (`kusuma-agro` tidak termasuk, tidak ada perubahan lokal — cukup `git clone` ulang di PC baru):
+**Catatan identitas commit**: `git config --global user.email` masih `maulana196.ma@gmail.com` (Gmail pribadi). Untuk repo perusahaan biasanya dipakai email kerja (`maulana@kusu.ma`). Commit yang sudah ada tidak berubah, tapi commit berikutnya bisa diarahkan ke email kerja dengan `git config user.email maulana@kusu.ma` per repo.
 
-| Folder | Commit terbaru | Perlu disalin manual selain kode |
+### 2c. Pindah PC (selama repo GitHub belum ada)
+
+**SETELAH repo Kusuma dibuat dan di-push, bagian ini tidak relevan lagi** — cukup `git clone` di PC baru, plus salin `.env` terpisah.
+
+Selama belum di-push, seluruh hasil kerja HANYA ada di harddisk PC ini. Kelima folder harus disalin utuh berikut folder tersembunyi `.git`-nya:
+
+| Folder | Commit | Perlu disalin manual selain kode |
 |---|---|---|
-| `kusuma-id-admin` | `f7f49b6` | `.env` (gitignored) |
-| `kusuma-agro-backend` | `d671e78` | — |
-| `kusuma-agro-frontend` | `1d50e6c` | — |
-| `kusuma-industri` | `ddfb389`, `5e24422` | `.env` (gitignored) |
+| `kusuma-id-admin` | `94b3af8` | `.env` (gitignored) |
+| `kusuma-industri` | `497b2a1` | `.env` (gitignored) |
+| `kusuma-agro-backend` | `ba3d7f5` | — |
+| `kusuma-agro-frontend` | `aa59639` | — |
+| `kusuma-agro` | `5e1afac` | — |
 
 **Langkah**:
-1. Copy SELURUH folder tiap project (termasuk folder tersembunyi `.git`) ke USB/cloud drive/network share.
+1. Copy SELURUH folder tiap project (termasuk `.git`) ke USB/cloud drive/network share.
    - `kusuma-id-admin` & `kusuma-industri`: boleh skip `vendor/` (bisa `composer install` ulang) dan `writable/cache|logs|session|debugbar`. **Jangan lupa file `.env`** — sengaja di-gitignore, tidak ikut `.git`, harus disalin manual terpisah (template ada di bagian 9 & 10 per-project).
+   - Pertimbangkan menyalin juga `git_history_backup/` (bundle riwayat lama, bagian 2a) kalau masih dianggap perlu — lokasinya di folder sementara.
 2. Di PC baru, taruh di path yang sama: `C:\xampp\htdocs\<nama-folder>\`.
-3. Cek `git log --oneline -1` **dan** `git status --short` di tiap folder — hash di tabel atas harus muncul, dan working tree harus bersih.
+3. Cek `git log --oneline` **dan** `git status --short` di tiap folder — harus muncul 1 commit sesuai tabel di atas, working tree bersih.
 
-   > 📌 **Pelajaran dari kejadian nyata**: pekerjaan 22 Agustus di `kusuma-id-admin` pernah HILANG total karena folder diganti dengan hasil `git clone` ulang dari PC lain — lineage-nya beda, semua perubahan lenyap dan harus dikerjakan ulang. **Selalu commit sebelum menyalin folder, dan jangan pernah menimpa folder yang masih punya perubahan belum ter-commit.**
+   > 📌 **Pelajaran dari kejadian nyata**: pekerjaan 22 Agustus di `kusuma-id-admin` pernah HILANG total karena folder diganti dengan hasil `git clone` ulang dari PC lain — lineage-nya beda, semua perubahan lenyap dan harus dikerjakan ulang dari awal. **Selalu commit sebelum menyalin folder, dan jangan pernah menimpa folder yang masih punya perubahan belum ter-commit.** Push ke GitHub secepatnya adalah perlindungan terbaik dari kejadian seperti ini.
 4. Ikuti bagian "Setup lokal" di tiap project (bagian 5–10) untuk menyalakan servernya. Setup Apache/PHP/hosts **tidak ikut tersalin** — lihat bagian 13 poin 10–14.
 
 ---
@@ -556,12 +579,13 @@ Dites langsung di browser: judul tab "Kusuma Group | …", 6 kartu Services rend
 2. **Sosial media di Site Settings** — Instagram mengarah ke `instagram.com/blupblup.th` (kelihatannya bukan akun Kusuma), YouTube & TikTok masih URL generik. Ini ikut masuk ke JSON-LD `sameAs`, jadi terbaca mesin pencari.
 3. **Testimoni kurang kredibel** — "Rina, Malang" / "Budi, Surabaya" / "Sari, Batu": nama depan + kota, tanpa foto/verifikasi.
 4. **Konten belum benar-benar mewakili "Kusuma Group"** — branding/meta sudah korporat, tapi About/testimoni/galeri masih Agrowisata-sentris. Hotel, Estate, dan Industri belum punya porsi setara.
-5. **Riwayat git masih memuat data pribadi anak magang** — sudah diputuskan diterima (bagian 2a), tapi perlu dibersihkan kalau repo Kusuma nanti dibuka ke publik atau diaudit.
+5. ~~**Riwayat git masih memuat data pribadi anak magang**~~ — **SELESAI**: kelima repo di-`git init` ulang 24 Agustus, riwayat lama dibuang total (bagian 2a).
 
 ### Teknis — belum dikerjakan
 6. **Kode render lama di `main.js` belum di-escape** — section Hero/Companies/Gallery/Testimonials/Contact masih inject `innerHTML` pakai template literal tanpa `esc()`. Risiko rendah (konten dikendalikan admin yang sudah login), tapi sebaiknya diseragamkan pakai helper `esc()` yang sudah tersedia.
 7. **`kusuma-industri` belum punya `DEPLOY.md`** (lihat bagian 10), begitu juga `kusuma-agro`, `kusuma-agro-backend`, `kusuma-agro-frontend` (lihat bagian 3).
-8. **Belum ada satupun repo yang di-push** — semua 5 repo masih `origin` ke `farahaufahwdh-creator/...` dan autentikasi GitHub belum di-setup. Seluruh hasil kerja cuma ada di harddisk PC ini. Lihat bagian 2a untuk langkah pindah ke repo Kusuma.
+8. 🔴 **Belum ada satupun repo yang di-push** — kelima repo belum punya `origin`, autentikasi GitHub belum di-setup. Seluruh hasil kerja cuma ada di harddisk PC ini. **Ini prioritas tertinggi.** Langkah lengkap di bagian 2b.
+9. **`kusuma-agro-backend` belum punya `.gitignore`** — saat ini tidak ada file log/cache yang tertinggal, jadi belum jadi masalah. Tapi begitu aplikasi jalan lama, `application/logs/*` dan `application/cache/*` akan ikut ter-commit. Sebaiknya ditambahkan `.gitignore` standar CI3.
 
 ### Catatan setup yang BARU ditemukan di PC ini (24 Agustus)
 10. **`mod_expires` harus diaktifkan** di `C:\xampp\apache\conf\httpd.conf` (hapus `#` di depan `LoadModule expires_module modules/mod_expires.so`) — dibutuhkan cache header di `public/.htaccess`. `mod_headers`, `mod_actions`, `mod_cgi` biasanya sudah aktif bawaan.
