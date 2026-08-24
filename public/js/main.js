@@ -120,20 +120,10 @@
   };
 
   /* =====================================================================
-     1. BRAND / LOGO (dipakai di navbar & footer)
+     1. BRAND / LOGO
+     Logo navbar & footer sekarang dipasang langsung di landing_page.php
+     sebagai <img>, tidak lagi dirakit di sini.
      ===================================================================== */
-  document.querySelectorAll("[data-brand-slot]").forEach((slot) => {
-    slot.innerHTML = `
-      <svg viewBox="0 0 48 48" fill="none">
-        <circle cx="24" cy="26" r="14" fill="#62c94b"/>
-        <path d="M24 26c-3-6-1-11 3-14" stroke="#1f5b34" stroke-width="2.4" stroke-linecap="round" fill="none"/>
-        <path d="M24 12c2-3 6-4 9-3-1 3-4 5-7 5" fill="#e2543f"/>
-      </svg>
-      <div class="brand-text">
-        <span class="b1">${C.brand.name1}</span>
-        <span class="b2">${C.brand.name2} ${C.brand.name3 || ""}</span>
-      </div>`;
-  });
 
   /* =====================================================================
      2. NAVBAR: efek solid saat scroll + menu mobile
@@ -193,13 +183,13 @@
     .map(
       (s, i) => `
     <div class="hero-slide ${i === 0 ? "active" : ""}" data-i="${i}">
-      <div class="bg" style="background-image:url('${s.image}')"></div>
+      <div class="bg" style="background-image:url('${esc(s.image)}')"></div>
       <div class="hero-content">
-        <span class="eyebrow">${s.eyebrow || ""}</span>
-        <h1>${s.title}</h1>
-        <p>${s.subtitle}</p>
+        <span class="eyebrow">${esc(s.eyebrow)}</span>
+        <h1>${esc(s.title)}</h1>
+        <p>${esc(s.subtitle)}</p>
         <div class="hero-cta">
-          <a href="${s.ctaLink || "#companies"}" class="btn btn-primary">${s.ctaText || "Selengkapnya"} ${svg("arrow", 'width="18" height="18"')}</a>
+          <a href="${esc(s.ctaLink || "#companies")}" class="btn btn-primary">${esc(s.ctaText || "Selengkapnya")} ${svg("arrow", 'width="18" height="18"')}</a>
           <a href="#contact" class="btn btn-ghost">Contact Us</a>
         </div>
       </div>
@@ -276,7 +266,7 @@
   statsWrap.innerHTML = C.stats
     .map(
       (s) => `
-    <div class="stat-item"><strong data-target="${s.number}">0</strong><span>${s.label}</span></div>`,
+    <div class="stat-item"><strong data-target="${esc(s.number)}">0</strong><span>${esc(s.label)}</span></div>`,
     )
     .join("");
 
@@ -318,12 +308,12 @@
           Boolean,
         );
         return `
-        <a class="company-card reveal" href="${co.link}" target="_blank" rel="noopener" data-company="${coIdx}">
+        <a class="company-card reveal" href="${esc(co.link)}" target="_blank" rel="noopener" data-company="${coIdx}">
           <div class="company-photos">
             ${photos
               .map(
                 (p, i) =>
-                  `<div class="company-slide ${i === 0 ? "active" : ""}" data-i="${i}" style="background-image:url('${p}')"></div>`,
+                  `<div class="company-slide ${i === 0 ? "active" : ""}" data-i="${i}" style="background-image:url('${esc(p)}')"></div>`,
               )
               .join("")}
           </div>
@@ -340,8 +330,8 @@
                   </div>`
                 : ""
             }
-            <h3>${co.name}</h3>
-            <p>${co.desc}</p>
+            <h3>${esc(co.name)}</h3>
+            <p>${esc(co.desc)}</p>
             <span class="company-link">Kunjungi Website ${svg("arrow", 'width="15" height="15"')}</span>
           </div>
         </a>`;
@@ -465,8 +455,8 @@
     .map(
       (p) => `
     <div class="gallery-item reveal">
-      <img src="${p.image}" alt="${p.caption}" loading="lazy">
-      <div class="gallery-cap">${p.caption}</div>
+      <img src="${esc(p.image)}" alt="${esc(p.caption)}" loading="lazy">
+      <div class="gallery-cap">${esc(p.caption)}</div>
     </div>`,
     )
     .join("");
@@ -495,8 +485,8 @@
       (t) => `
     <div class="testi-card reveal">
       <div class="testi-stars">${"★".repeat(t.rating)}${"☆".repeat(5 - t.rating)}</div>
-      <p>&ldquo;${t.text}&rdquo;</p>
-      <div class="testi-name">${t.name}</div>
+      <p>&ldquo;${esc(t.text)}&rdquo;</p>
+      <div class="testi-name">${esc(t.name)}</div>
     </div>`,
     )
     .join("");
@@ -505,23 +495,24 @@
      10. KONTAK + PETA + SOSIAL MEDIA
      ===================================================================== */
   document.getElementById("contact-info").innerHTML = `
-    <a class="contact-row" href="${C.contact.mapsLinkUrl}" target="_blank" rel="noopener">
+    <a class="contact-row" href="${esc(C.contact.mapsLinkUrl)}" target="_blank" rel="noopener">
       ${svg("pin", 'width="22" height="22"')}
-      <div><strong>Alamat</strong><span>${C.contact.address}</span></div>
+      <div><strong>Alamat</strong><span>${esc(C.contact.address)}</span></div>
     </a>
-    <a class="contact-row" href="${C.contact.phoneLink}">
+    <a class="contact-row" href="${esc(C.contact.phoneLink)}">
       ${svg("phone", 'width="22" height="22"')}
-      <div><strong>Telepon</strong><span>${C.contact.phone}</span></div>
+      <div><strong>Telepon</strong><span>${esc(C.contact.phone)}</span></div>
     </a>
-    <a class="contact-row" href="mailto:${C.contact.email}">
+    <a class="contact-row" href="mailto:${esc(C.contact.email)}">
       ${svg("mail", 'width="22" height="22"')}
-      <div><strong>Email</strong><span>${C.contact.email}</span></div>
+      <div><strong>Email</strong><span>${esc(C.contact.email)}</span></div>
     </a>
     <div class="social-row">
       ${Object.entries(C.contact.socials)
+        .filter(([, v]) => v)
         .map(
           ([k, v]) =>
-            `<a href="${v}" target="_blank" rel="noopener" aria-label="${k}">${svg(k, 'width="19" height="19"')}</a>`,
+            `<a href="${esc(v)}" target="_blank" rel="noopener" aria-label="${esc(k)}">${svg(k, 'width="19" height="19"')}</a>`,
         )
         .join("")}
     </div>`;

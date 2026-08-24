@@ -99,7 +99,18 @@ Ini yang **PALING PENTING** untuk direview sebelum live — dikumpulkan dari sem
 ### Wajib dibereskan di SEMUA project sebelum go-live
 - [ ] **Generate `encryption.key` BARU** untuk tiap project CI4 (`kusuma-id-admin`, `kusuma-industri`) — jangan pakai key dev lokal yang ada di dokumen ini. `php spark key:generate` di server production.
 - [ ] **`.env` production**: `CI_ENVIRONMENT = production`, `app.baseURL` ke domain asli (bukan `*.test`), `database.*` ke kredensial DB server yang sebenarnya.
-- [ ] **Hapus akun test `reviewer` / `ReviewTest123!`** dari tabel `admins` (di `adminkusuma_db`) — dipakai bareng 3 sistem (`kusuma-id-admin`, `kusuma-agro-backend` via token, `kusuma-industri`). Pastikan akun admin ASLI (dengan password yang benar-benar dijaga kerahasiaannya) sudah ada sebelum menghapus akun test ini.
+- [ ] **Buat akun admin ASLI, lalu hapus akun test `reviewer`.**
+
+      🔴 **Ini blocker go-live yang nyata**, bukan sekadar kerapian. Saat ini tidak ada satu pun akun yang bisa dipakai perusahaan: akun `admin` (id 1) password plaintext-nya **tidak diketahui siapa pun** (warisan pengembang sebelumnya), dan `reviewer` adalah akun test yang harus dibuang. Kalau `reviewer` dihapus lebih dulu, **tidak ada yang bisa masuk CMS sama sekali**.
+
+      Sudah disediakan perintah CLI untuk ini (jalankan di root `kusuma-id-admin`, juga bisa dipakai di server cPanel lewat Terminal):
+      ```bash
+      php spark admin:password            # buat akun baru, atau ganti password akun yang ada
+      php spark admin:remove reviewer     # hapus akun test (menolak kalau itu akun terakhir)
+      ```
+      `admin:password` juga bisa dipakai untuk mengambil alih akun `admin` id 1 — jalankan lalu isi username `admin`, password akan diganti tanpa perlu tahu yang lama.
+
+      Tabel `admins` dipakai bersama 3 sistem (`kusuma-id-admin`, `kusuma-agro-backend` via token, `kusuma-industri`), jadi cukup dikerjakan sekali dari sini.
 - [ ] **8 file JS di `kusuma-agro`** (`dynamic-*.js`) dan `kusuma-agro-frontend/Login.html` masih hardcode `API_BASE_URL`/`ID_API_BASE_URL`/`INDUSTRI_ADMIN_URL` ke domain `*.test` — WAJIB diganti ke domain production sebelum deploy, kalau tidak situs publik & dashboard admin tidak akan bisa fetch data sama sekali.
 - [ ] Pastikan **HTTPS aktif** di server production sebelum pengguna login — cookie session `kusuma-id-admin` & `kusuma-industri` otomatis jadi `secure` di `CI_ENVIRONMENT=production` (lihat kode masing-masing), kalau situs belum HTTPS maka session/login TIDAK AKAN JALAN (cookie secure tidak terkirim lewat HTTP biasa). Ini pernah kejadian saat testing lokal — expected behavior, bukan bug.
 
@@ -595,7 +606,7 @@ Dites langsung di browser: judul tab "Kusuma Group | …", 6 kartu Services rend
 5. ~~**Riwayat git masih memuat data pribadi anak magang**~~ — **SELESAI**: kelima repo di-`git init` ulang 24 Agustus, riwayat lama dibuang total (bagian 2a).
 
 ### Teknis — belum dikerjakan
-6. **Kode render lama di `main.js` belum di-escape** — section Hero/Companies/Gallery/Testimonials/Contact masih inject `innerHTML` pakai template literal tanpa `esc()`. Risiko rendah (konten dikendalikan admin yang sudah login), tapi sebaiknya diseragamkan pakai helper `esc()` yang sudah tersedia.
+6. ~~**Kode render lama di `main.js` belum di-escape**~~ — **SELESAI**: seluruh titik `innerHTML` di Hero, Stats, Companies, Gallery, Testimonials, dan Contact sekarang memakai `esc()`. Sudah dibuktikan dengan menyisipkan payload `<img src=x onerror=...>` lewat database — tampil sebagai teks biasa, tidak terinjeksi. Sekalian dihapus blok `[data-brand-slot]` yang merupakan kode mati (elemennya di-comment di view, dan `brand.name1/2/3` yang dirujuknya tidak pernah disediakan `SiteContent`).
 7. ~~**Belum ada `DEPLOY.md`** untuk 4 project~~ — **SELESAI**: kelima repo sudah punya `DEPLOY.md` masing-masing (lihat bagian 3).
 8. ~~**Belum ada satupun repo yang di-push**~~ — **SELESAI**: kelima repo sudah di `kusumatech-org` (bagian 1 & 2b).
 9. **`kusuma-agro-backend` belum punya `.gitignore`** — saat ini tidak ada file log/cache yang tertinggal, jadi belum jadi masalah. Tapi begitu aplikasi jalan lama, `application/logs/*` dan `application/cache/*` akan ikut ter-commit. Sebaiknya ditambahkan `.gitignore` standar CI3.
