@@ -116,9 +116,22 @@ Ini yang **PALING PENTING** untuk direview sebelum live — dikumpulkan dari sem
 - [ ] `kusuma-agro`: section "Signature Packages" di homepage (6 kartu produk masih "Nama Produk 1-6", harga `Rp 000.000`) — **ini data ASLI di tabel `signature_products`, bisa diedit langsung lewat dashboard `kusuma-agro-frontend` → Kusuma Agro → Packages → sub-bagian Signature Packages**, tidak perlu ubah kode.
 - [ ] `kusuma-agro`: beberapa foto masih placeholder stok tidak nyambung dengan konten (foto biji kopi di tile "Waterpark", dll) — diedit lewat menu **Site Images** di dashboard yang sama.
 
-### Yang BELUM ada dokumen deploy-nya
-- `kusuma-id-admin` sudah punya `DEPLOY.md` (panduan lengkap ke cPanel).
-- `kusuma-agro`, `kusuma-agro-backend`, `kusuma-agro-frontend`, `kusuma-industri` **belum ada dokumen deploy setara** — perlu direncanakan (hosting mana, domain apa, satu server atau terpisah) sebelum benar-benar dieksekusi ke production. Karena `kusuma-agro-backend` dan `kusuma-id-admin`/nanti-mungkin-`kusuma-industri` saling berbagi tabel `admins`/`api_tokens`, sebaiknya direncanakan di database server YANG SAMA supaya skema login terpadu tetap jalan di production juga (lihat bagian 4).
+### Dokumen deploy — SUDAH LENGKAP kelimanya (24 Agustus 2026)
+
+Tiap repo punya `DEPLOY.md` sendiri di root-nya. **Urutan deploy penting**, ikuti dari atas:
+
+| # | Project | Fokus panduannya |
+|---|---|---|
+| 1 | `kusuma-agro-backend` | CI3 + PHP 7.4, **tidak pakai `.env`** (kredensial diedit langsung di file PHP yang ter-commit), document root ke root project, `encryption_key` masih kosong |
+| 2 | `kusuma-id-admin` | CI4 + PHP 8.1+, document root ke `public/`, import snapshot 31 tabel, peta ketergantungan antar-project |
+| 3 | `kusuma-industri` | CI4, **dua database sekaligus** — kredensial DB kedua hardcoded di `app/Config/Database.php`, bukan `.env` |
+| 4 | `kusuma-agro` | Statis, wajib ganti `API_BASE_URL` di **8 file JS** (daftar baris lengkap ada di panduannya) |
+| 5 | `kusuma-agro-frontend` | Statis, wajib ganti **3 URL backend**, plus proteksi ekstra karena ini pintu masuk admin |
+
+**Tiga hal yang paling sering bikin gagal, semuanya sudah ditulis di panduan masing-masing:**
+1. **HTTPS harus aktif sebelum ada yang login** — `CI_ENVIRONMENT=production` membuat cookie sesi `secure`; tanpa HTTPS login tidak akan pernah berhasil.
+2. **`kusuma-industri` punya kredensial database kedua yang tidak ada di `.env`** — kalau terlewat, situs jalan normal tapi login selalu gagal tanpa pesan yang menjelaskan.
+3. **Ketiga backend harus bisa mengakses `adminkusuma_db` yang sama** — sebaiknya satu server MySQL. Kalau dipisah, skema login terpadu rusak.
 
 ### Legacy / arsitektur (tidak menghalangi go-live, tapi dicatat)
 - `kusuma-agro-backend` pakai CodeIgniter 3 yang sudah legacy/mendekati EOL — hardening kali ini cuma menambal (auth, dll), bukan migrasi arsitektur. Pertimbangkan migrasi ke pola CI4 seperti `kusuma-id-admin` di masa depan.
@@ -583,7 +596,7 @@ Dites langsung di browser: judul tab "Kusuma Group | …", 6 kartu Services rend
 
 ### Teknis — belum dikerjakan
 6. **Kode render lama di `main.js` belum di-escape** — section Hero/Companies/Gallery/Testimonials/Contact masih inject `innerHTML` pakai template literal tanpa `esc()`. Risiko rendah (konten dikendalikan admin yang sudah login), tapi sebaiknya diseragamkan pakai helper `esc()` yang sudah tersedia.
-7. **`kusuma-industri` belum punya `DEPLOY.md`** (lihat bagian 10), begitu juga `kusuma-agro`, `kusuma-agro-backend`, `kusuma-agro-frontend` (lihat bagian 3).
+7. ~~**Belum ada `DEPLOY.md`** untuk 4 project~~ — **SELESAI**: kelima repo sudah punya `DEPLOY.md` masing-masing (lihat bagian 3).
 8. ~~**Belum ada satupun repo yang di-push**~~ — **SELESAI**: kelima repo sudah di `kusumatech-org` (bagian 1 & 2b).
 9. **`kusuma-agro-backend` belum punya `.gitignore`** — saat ini tidak ada file log/cache yang tertinggal, jadi belum jadi masalah. Tapi begitu aplikasi jalan lama, `application/logs/*` dan `application/cache/*` akan ikut ter-commit. Sebaiknya ditambahkan `.gitignore` standar CI3.
 
