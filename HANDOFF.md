@@ -136,6 +136,22 @@ Ini yang **PALING PENTING** untuk direview sebelum live — dikumpulkan dari sem
 - [ ] `kusuma-agro`: section "Signature Packages" di homepage (6 kartu produk masih "Nama Produk 1-6", harga `Rp 000.000`) — **ini data ASLI di tabel `signature_products`, bisa diedit langsung lewat dashboard `kusuma-agro-frontend` → Kusuma Agro → Packages → sub-bagian Signature Packages**, tidak perlu ubah kode.
 - [ ] `kusuma-agro`: beberapa foto masih placeholder stok tidak nyambung dengan konten (foto biji kopi di tile "Waterpark", dll) — diedit lewat menu **Site Images** di dashboard yang sama.
 
+### Pengisian konten — daftar periksa ada di `KONTEN.md` (17 September 2026)
+
+Kode sudah siap deploy, tapi **kontennya belum layak publikasi**. Yang tersisa dikerjakan lewat dashboard, bukan lewat kode:
+
+| Situs | Jumlah item | Yang paling mencolok |
+|---|---|---|
+| Kusuma Group (kusuma.id) | 11 | 3 hero slide + 6 foto Layanan masih `picsum.photos` (gambar acak pihak ketiga), foto pendiri belum ada |
+| Kusuma Agrowisata | 23 | Signature Packages masih "Nama Produk 1–6" harga `Rp 000.000` **tampil di halaman depan**; 17 Site Images masih picsum |
+| Kusuma Agro Industri | 0 | ✅ sudah pakai konten & foto asli |
+
+Plus: URL Instagram di Site Settings mengarah ke akun yang bukan milik Kusuma (`blupblup.th`) dan ikut terbaca mesin pencari lewat JSON-LD; YouTube & TikTok masih URL generik.
+
+`KONTEN.md` ditulis untuk diserahkan langsung ke pengisi konten — sudah termasuk cara mengakses dari komputer lain lewat file `hosts`, daftar alamat, dan panduan kalau ada kendala.
+
+**Saran urutan**: isi konten di lokal dulu, baru deploy. Kalau dibalik, situs perusahaan sempat tayang dengan foto acak dan "Nama Produk 1".
+
 ### Dokumen deploy — SUDAH LENGKAP kelimanya (24 Agustus 2026)
 
 Tiap repo punya `DEPLOY.md` sendiri di root-nya. **Urutan deploy penting**, ikuti dari atas:
