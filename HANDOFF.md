@@ -99,18 +99,27 @@ Ini yang **PALING PENTING** untuk direview sebelum live — dikumpulkan dari sem
 ### Wajib dibereskan di SEMUA project sebelum go-live
 - [ ] **Generate `encryption.key` BARU** untuk tiap project CI4 (`kusuma-id-admin`, `kusuma-industri`) — jangan pakai key dev lokal yang ada di dokumen ini. `php spark key:generate` di server production.
 - [ ] **`.env` production**: `CI_ENVIRONMENT = production`, `app.baseURL` ke domain asli (bukan `*.test`), `database.*` ke kredensial DB server yang sebenarnya.
-- [ ] **Buat akun admin ASLI, lalu hapus akun test `reviewer`.**
+- [x] ~~**Buat akun admin ASLI, lalu hapus akun test `reviewer`**~~ — **SELESAI 17 September 2026.**
 
-      🔴 **Ini blocker go-live yang nyata**, bukan sekadar kerapian. Saat ini tidak ada satu pun akun yang bisa dipakai perusahaan: akun `admin` (id 1) password plaintext-nya **tidak diketahui siapa pun** (warisan pengembang sebelumnya), dan `reviewer` adalah akun test yang harus dibuang. Kalau `reviewer` dihapus lebih dulu, **tidak ada yang bisa masuk CMS sama sekali**.
+      Kondisi akun sekarang di tabel `admins` (dipakai bersama 3 sistem):
 
-      Sudah disediakan perintah CLI untuk ini (jalankan di root `kusuma-id-admin`, juga bisa dipakai di server cPanel lewat Terminal):
+      | ID | Username | Nama Lengkap | Untuk |
+      |---|---|---|---|
+      | 4 | `kag_admin` | KAG Admin | Pemilik/pengelola utama |
+      | 5 | `admin` | Akun admin | Anak magang, pengisian konten |
+
+      Akun `admin` id 1 warisan pengembang sebelumnya (password tidak diketahui siapa pun) dan akun test `reviewer` **sudah dihapus**, berikut 10 token kedaluwarsa miliknya di `api_tokens`.
+
+      Perintah pengelolaannya (jalankan di root `kusuma-id-admin`, juga jalan di Terminal cPanel):
       ```bash
       php spark admin:password            # buat akun baru, atau ganti password akun yang ada
-      php spark admin:remove reviewer     # hapus akun test (menolak kalau itu akun terakhir)
+      php spark admin:remove <username>   # hapus akun (menolak kalau itu akun terakhir)
       ```
-      `admin:password` juga bisa dipakai untuk mengambil alih akun `admin` id 1 — jalankan lalu isi username `admin`, password akan diganti tanpa perlu tahu yang lama.
+      `admin:password` bisa juga dipakai mengambil alih akun yang password lamanya tidak diketahui — cukup isi username yang sama.
 
-      Tabel `admins` dipakai bersama 3 sistem (`kusuma-id-admin`, `kusuma-agro-backend` via token, `kusuma-industri`), jadi cukup dikerjakan sekali dari sini.
+      ⚠️ **Dua hal yang masih terbuka soal akun:**
+      1. **Tidak ada pembagian hak akses sama sekali.** Tabel `admins` tidak punya kolom peran, dan tidak ada pengecekan level di controller maupun filter manapun. Setiap akun = akses penuh: bisa mengelola seluruh konten, **bisa mengubah/menghapus akun lain lewat menu Admins di dashboard**, dan otomatis bisa masuk ke `kusuma-industri` serta API `kusuma-agro-backend`. API sudah memblokir tabel `admins` (`Api.php` `$blocked`), tapi dashboard web tidak. Sudah disampaikan; keputusan sadar untuk sementara tidak memakai pembatasan.
+      2. **Akun magang memakai username `admin`** — nama paling mudah ditebak untuk brute-force (ada rate limit 5x/menit/IP sebagai penahan). Nama lengkapnya juga generik, jadi tidak bisa ditelusuri siapa pemakainya kalau nanti ada magang kedua. **Hapus akun ini begitu masa magang selesai.**
 - [ ] **8 file JS di `kusuma-agro`** (`dynamic-*.js`) dan `kusuma-agro-frontend/Login.html` masih hardcode `API_BASE_URL`/`ID_API_BASE_URL`/`INDUSTRI_ADMIN_URL` ke domain `*.test` — WAJIB diganti ke domain production sebelum deploy, kalau tidak situs publik & dashboard admin tidak akan bisa fetch data sama sekali.
 - [ ] Pastikan **HTTPS aktif** di server production sebelum pengguna login — cookie session `kusuma-id-admin` & `kusuma-industri` otomatis jadi `secure` di `CI_ENVIRONMENT=production` (lihat kode masing-masing), kalau situs belum HTTPS maka session/login TIDAK AKAN JALAN (cookie secure tidak terkirim lewat HTTP biasa). Ini pernah kejadian saat testing lokal — expected behavior, bukan bug.
 
@@ -156,6 +165,11 @@ Sebelum masuk ke detail per-project, penting paham 3 hal yang saling berhubungan
 
 ### 4a. Database `adminkusuma_db` (dipakai `kusuma-id-admin` + `kusuma-agro-backend`)
 **31 tabel** total (9 tabel CMS `kusuma-id-admin` + `team_members` yang ditambahkan di bagian 12 + 20 tabel `kusuma-agro-backend` + 1 tabel `api_tokens` bersama). **Cara restore termudah**: import SATU file `kusuma-id-admin/app/Database/adminkusuma_db_full_snapshot_20260824.sql` (snapshot lengkap, `mysqldump`, sudah termasuk skema bagian 12) — JANGAN pakai `kusuma_admin.sql` (basi). Detail command & urutan migrasi manual (kalau snapshot hilang) ada di bagian 7.
+
+> 🔑 **Tabel `admins` dan `api_tokens` di snapshot ini sengaja KOSONG** (struktur saja, tanpa baris). Hash password akun asli tidak disimpan di repo supaya tidak bisa di-brute-force offline kalau repo bocor. Setelah import, **belum ada akun sama sekali** — buat dulu:
+> ```bash
+> php spark admin:password
+> ```
 
 ```bash
 "C:\xampp\mysql\bin\mysql.exe" -u root -e "CREATE DATABASE adminkusuma_db CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;"
@@ -245,7 +259,7 @@ XAMPP di PC ini cuma punya PHP 7.4 bawaan, sementara kedua project CI4 itu butuh
 3. Database: ikuti bagian 4a (import snapshot lengkap, JANGAN jalankan migrasi satu-satu kecuali snapshot hilang — lihat cadangan urutan migrasi di bagian 7).
 4. Restart Apache. Test: `curl http://kusuma-agro-backend.test/index.php/api/packages` harus balikin JSON.
 
-**Login test**: `reviewer` / `ReviewTest123!` (tabel `admins` bersama), via `POST /api/auth/login` atau lewat `Login.html`.
+**Login**: pakai akun di tabel `admins` bersama (saat ini `kag_admin` atau `admin` — lihat bagian 3), via `POST /api/auth/login` atau lewat `Login.html`. Akun test `reviewer` sudah dihapus 17 Sep 2026.
 
 **TODO**: evaluasi migrasi dari CodeIgniter 3 (legacy/mendekati EOL) ke pola CI4 seperti `kusuma-id-admin` — di luar scope hardening kali ini.
 
@@ -311,7 +325,7 @@ CREATE TABLE api_tokens (
 
 **Setup lokal**: tidak perlu vhost — buka langsung `http://localhost/kusuma-agro-frontend/Login.html`. Perlu `kusuma-agro-backend`, `kusuma-id-admin`, `kusuma-industri` semua sudah jalan supaya 3 panelnya berfungsi penuh.
 
-**Belum diperbaiki**: placeholder "NAME@KUSUMA.CO.ID" di field username form login — sisa UI lama, username sebenarnya bukan format email (isi dengan username asli di tabel `admins`, mis. `reviewer` atau username admin sungguhan). Kosmetik saja, tidak menghalangi fungsi.
+**Belum diperbaiki**: placeholder "NAME@KUSUMA.CO.ID" di field username form login — sisa UI lama, username sebenarnya bukan format email (isi dengan username asli di tabel `admins`, mis. `kag_admin`). Kosmetik saja, tidak menghalangi fungsi.
 
 ---
 
@@ -383,7 +397,7 @@ CREATE TABLE api_tokens (
    (Key ini CUMA dev lokal — WAJIB generate baru untuk production, lihat `DEPLOY.md` & bagian 3.)
 8. Restart Apache.
 
-**Login test**: `reviewer` / `ReviewTest123!` (akun asli `admin` password-nya di-hash, plaintext tidak diketahui).
+**Login**: pakai akun di tabel `admins` (saat ini `kag_admin` atau `admin` — lihat bagian 3). Akun test `reviewer` dan akun warisan `admin` id 1 sudah dihapus 17 Sep 2026; password baru dibuat lewat `php spark admin:password`.
 
 **Untuk deploy production**: ikuti `DEPLOY.md` di root project ini — sudah berisi panduan cPanel lengkap (document root ke `public/`, pilih PHP di MultiPHP Manager, `.env` production, dll).
 
@@ -461,7 +475,7 @@ CREATE TABLE api_tokens (
    (Key CUMA dev lokal, generate baru untuk production. Kredensial `adminkusuma_db` untuk grup `'shared'` di-hardcode di `app/Config/Database.php`, bukan `.env` — edit di situ kalau beda di PC/server baru.)
 6. Restart Apache.
 
-**Login test**: `reviewer` / `ReviewTest123!` (tabel `admins` bersama, sama seperti 2 project lain).
+**Login**: pakai akun di tabel `admins` bersama, sama seperti 2 project lain (saat ini `kag_admin` atau `admin` — lihat bagian 3). Akun test `reviewer` sudah dihapus 17 Sep 2026.
 
 **Belum ada**: `DEPLOY.md` setara `kusuma-id-admin` untuk panduan deploy production — perlu dibuat kalau sudah ada rencana hosting-nya.
 
@@ -484,7 +498,7 @@ curl -X POST http://kusuma-industri.test/admin/marketplace/store -d "nama=test" 
 
 # 4. login test (ambil token dari kusuma-agro-backend, verifikasi diterima kusuma-id-admin)
 curl -X POST http://kusuma-agro-backend.test/index.php/api/auth/login \
-  -H "Content-Type: application/json" -d '{"username":"reviewer","password":"ReviewTest123!"}'
+  -H "Content-Type: application/json" -d '{"username":"USERNAME_ADMIN","password":"PASSWORD_ADMIN"}'
 ```
 
 Kalau semua di atas sesuai ekspektasi, berarti environment lokal sudah pulih sepenuhnya dan siap dilanjutkan ke tahap review konten (bagian 3) lalu persiapan deploy.

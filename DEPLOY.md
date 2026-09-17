@@ -73,6 +73,8 @@ Kalau hosting tidak punya Terminal/SSH/Composer: jalankan `composer install --no
    > 📌 **Pakai file itu, JANGAN `kusuma_admin.sql`** — file lama itu tertinggal jauh dan sudah tidak dipakai.
 
    Snapshot ini berisi **31 tabel**: 10 tabel CMS project ini + 20 tabel `kusuma-agro-backend` + `api_tokens`. Jadi satu import ini sekaligus menyiapkan database untuk `kusuma-agro-backend` juga.
+
+   > 🔑 **Tabel `admins` dan `api_tokens` sengaja kosong** di snapshot — hash password akun asli tidak ikut disimpan di repo. Setelah import, belum ada akun sama sekali; buat lewat `php spark admin:password` (lihat bagian 9).
 3. Saat import, pastikan charset **utf8mb4** supaya karakter seperti em-dash (—) tidak berubah jadi `?`.
 
 ## 5. File `.env`
@@ -127,9 +129,14 @@ Endpoint sudah terkunci autentikasi, jadi ini lapisan pertahanan tambahan — ta
 
 ## 9. Bersihkan sebelum diserahkan
 
-- [ ] **Hapus akun test `reviewer`** dari tabel `admins`:
-      `DELETE FROM admins WHERE username = 'reviewer';`
-      **Pastikan akun admin asli sudah ada dan password-nya diketahui SEBELUM menghapus ini** — kalau tidak, tidak ada yang bisa masuk. Akun `admin` (id 1) ada di database tapi plaintext password-nya tidak diketahui.
+- [x] ~~**Hapus akun test `reviewer`**~~ — sudah dilakukan di lingkungan lokal (17 Sep 2026), berikut akun warisan `admin` id 1 yang password-nya tidak diketahui siapa pun.
+
+      Di server production, buat akun admin lebih dulu lalu hapus sisa akun yang tidak dipakai — pakai perintah CLI, jangan `DELETE` manual lewat phpMyAdmin (password perlu di-hash bcrypt):
+      ```bash
+      php spark admin:password            # buat akun / ganti password
+      php spark admin:remove <username>   # hapus akun (menolak kalau tinggal satu)
+      ```
+      ⚠️ **Tidak ada pembagian hak akses**: setiap akun punya akses penuh, termasuk mengelola akun lain lewat menu Admins dan masuk ke `kusuma-industri` + API `kusuma-agro-backend`. Beri akun hanya ke orang yang memang dipercaya penuh, dan hapus begitu tidak dipakai lagi.
 - [ ] Ganti foto yang masih placeholder lewat CMS (foto Kusuma Agro Industri, foto Services yang masih `picsum.photos`, foto founder) — lihat HANDOFF.md bagian 13.
 - [ ] Perbaiki URL sosial media di **Site Settings** — Instagram masih menunjuk akun yang bukan milik Kusuma, dan ikut terbaca mesin pencari lewat JSON-LD.
 

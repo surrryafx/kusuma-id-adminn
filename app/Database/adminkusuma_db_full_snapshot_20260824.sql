@@ -29,43 +29,6 @@ LOCK TABLES `about_items` WRITE;
 INSERT INTO `about_items` VALUES (1,'Pendiri','Ir. Edy Antoro','founder','','Kami bukan pelayan uang, bukan pula pelayan harta. Kami bukan orang yang hanya memikirkan untung, untung, dan untung. Tapi kami sadar bahwa kami harus berbuat baik.',1),(2,'Sejarah','Kusuma Agrowisata','history','assets/petik-apel.jpg','Berawal dari lahan 1,8 hektar pada tahun 1989, kini berkembang menjadi ratusan hektar dan menaungi beberapa perusahaan. Semoga semua ini menjadi berkah bagi kita semua.',2),(3,'Masa Depan','Bagian dari Lingkaran Kehidupan','future','assets/kolam.jpg','Kami berkomitmen menjadi perusahaan yang membuat kehidupan manusia lebih bahagia. Industri, Estate, dan Hotel adalah bagian dari perjalanan kami ke depan.',3);
 /*!40000 ALTER TABLE `about_items` ENABLE KEYS */;
 UNLOCK TABLES;
-DROP TABLE IF EXISTS `admins`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `admins` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `nama_lengkap` varchar(255) DEFAULT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-LOCK TABLES `admins` WRITE;
-/*!40000 ALTER TABLE `admins` DISABLE KEYS */;
-INSERT INTO `admins` VALUES (1,'admin','$2y$10$uFUkHQw2TmXZ5OrUIDB5dOqhxwigCgvcDEffAiw1dQYn2z/VF8t02',NULL,'2026-07-09 14:38:24'),(2,'reviewer','$2y$10$h2vk5zXsyzQdkMawRY3arOhoQBOF/kU4.0BofIW43xAwQtPmOnZ.K','Reviewer Test Account','2026-08-21 14:33:13');
-/*!40000 ALTER TABLE `admins` ENABLE KEYS */;
-UNLOCK TABLES;
-DROP TABLE IF EXISTS `api_tokens`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `api_tokens` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `token` varchar(64) NOT NULL,
-  `admin_id` int(11) NOT NULL,
-  `expires_at` datetime NOT NULL,
-  `created_at` datetime DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `token` (`token`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
-LOCK TABLES `api_tokens` WRITE;
-/*!40000 ALTER TABLE `api_tokens` DISABLE KEYS */;
-INSERT INTO `api_tokens` VALUES (1,'b702afb7cf39469e5b602ee03297a6d4d42290bc76603f608edb363cbf5f61de',2,'2026-08-24 12:33:00','2026-08-24 09:33:00'),(2,'e39645c230a433d6cb7b3edfcbf9543a44aae86e1741a8da9b07313b895af475',2,'2026-08-24 12:41:34','2026-08-24 09:41:34'),(3,'f74796a83224fe8100706fe95d31ea1e4b31709e537fc48a1b3afdd945589bd9',2,'2026-08-24 12:42:41','2026-08-24 09:42:41'),(4,'9d528dfe24a5ad2f7780a4f41cf0ea1514d4be87d66423c845fe46b2c6ac029c',2,'2026-08-24 12:45:03','2026-08-24 09:45:03'),(5,'18c2c3c888d3076248fd40d34298b36f4163c2b9c65990720093f4eb34e6fe0b',2,'2026-08-24 12:47:16','2026-08-24 09:47:16'),(6,'4bee0cd8a8b16a5345a959cb7ed2e03091e6f592921b2c531a0d92f9dea23929',2,'2026-08-24 12:49:36','2026-08-24 09:49:36'),(7,'8b6e9bbc7b64c8c6272b18e47cc219db9e7ee8de044e14ef093e3569b8e0614f',2,'2026-08-24 13:02:26','2026-08-24 10:02:26'),(8,'414c4615fcdce6f475ae5a4129831a8f7df935da8b61aaf19f752a28f3cb803b',2,'2026-08-24 13:02:39','2026-08-24 10:02:39'),(9,'0ab33630eb76619994274a94fc23e6abf5299620b1328371ab8d757a177173fe',2,'2026-08-24 13:05:46','2026-08-24 10:05:46');
-/*!40000 ALTER TABLE `api_tokens` ENABLE KEYS */;
-UNLOCK TABLES;
 DROP TABLE IF EXISTS `companies`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -688,6 +651,52 @@ LOCK TABLES `testimonials` WRITE;
 INSERT INTO `testimonials` VALUES (1,'Rina, Malang','Liburan keluarga paling seru! Anak-anak suka banget petik strawberry dan main di waterpark.',5,1),(2,'Budi, Surabaya','Hotelnya nyaman, udaranya sejuk, sarapannya enak. Pasti balik lagi.',5,2),(3,'Sari, Batu','Oleh-oleh Siiplah wajib dibawa pulang, seger banget rasa apelnya.',5,3);
 /*!40000 ALTER TABLE `testimonials` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP TABLE IF EXISTS `admins`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `admins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `username` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `nama_lengkap` varchar(255) DEFAULT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `api_tokens`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `api_tokens` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `token` varchar(64) NOT NULL,
+  `admin_id` int(11) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `created_at` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`)
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4;
+/*!40101 SET character_set_client = @saved_cs_client */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
