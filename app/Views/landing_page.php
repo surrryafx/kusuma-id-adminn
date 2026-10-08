@@ -93,12 +93,12 @@
         </a>
 
         <nav id="nav-links" class="nav-links">
-            <a href="#hero">Home</a>
-            <a href="#companies">Company</a>
-            <a href="#services">Services</a>
-            <a href="#about">About Us</a>
-            <a href="#gallery">Gallery</a>
-            <a href="#contact">Contact</a>
+            <a href="#hero">Beranda</a>
+            <a href="#companies">Perusahaan</a>
+            <a href="#services">Layanan</a>
+            <a href="#about">Tentang kami</a>
+            <a href="#gallery">Galeri</a>
+            <a href="#contact">Kontak</a>
         </nav>
 
         <div class="nav-cta">
@@ -106,7 +106,7 @@
                 href="#contact"
                 class="btn btn-primary"
                 style="padding: 11px 20px; font-size: 0.9rem">
-                <span class="btn-primary-label">Contact Us</span>
+                <span class="btn-primary-label">Hubungi Kami</span>
             </a>
             <button id="nav-toggle" class="nav-toggle" aria-label="Buka menu">
                 <span></span><span></span><span></span>
@@ -163,8 +163,8 @@
         <section id="companies" class="section-pad">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="eyebrow">Our Business Group</span>
-                    <h2>Our Companies</h2>
+                    <span class="eyebrow">UNIT BISNIS KAMI</span>
+                    <h2>Perusahaan Kami</h2>
                     <p>
                         Empat unit usaha yang tumbuh dari satu kebun apel kecil di Kota
                         Batu. Klik salah satu untuk kunjungi situs resminya.
@@ -178,7 +178,7 @@
         <section id="services" class="section-pad">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="eyebrow">What We Offer</span>
+                    <span class="eyebrow">APA YANG KAMI TAWARKAN</span>
                     <h2>Layanan Kami</h2>
                     <p id="services-subtitle"></p>
                 </div>
@@ -190,7 +190,7 @@
         <section id="gallery" class="section-pad">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="eyebrow">Photo Gallery</span>
+                    <span class="eyebrow">GALERI FOTO</span>
                     <h2>Momen Keseruan di Kusuma</h2>
                     <p id="gallery-subtitle"></p>
                 </div>
@@ -202,8 +202,8 @@
         <section id="about" class="section-pad about-path">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="eyebrow">Get to Know Us</span>
-                    <h2>About Us</h2>
+                    <span class="eyebrow">KENALI KAMI</span>
+                    <h2>Tentang Kami</h2>
                     <p id="about-subtitle"></p>
                 </div>
                 <div class="about-vine">
@@ -247,8 +247,8 @@
         <section id="testimonials" class="section-pad">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="eyebrow">What They Say</span>
-                    <h2>Stories from Visitors</h2>
+                    <span class="eyebrow">APA KATA MEREKA</span>
+                    <h2>Cerita dari Pengunjung</h2>
                 </div>
                 <div id="testi-grid" class="testi-grid"></div>
             </div>
@@ -258,8 +258,8 @@
         <section id="contact" class="section-pad">
             <div class="container">
                 <div class="section-head reveal">
-                    <span class="eyebrow">Come Visit</span>
-                    <h2>Get In Touch</h2>
+                    <span class="eyebrow">KUNJUNGI KAMI</span>
+                    <h2>Hubungi Kami</h2>
                     <p>
                         Rencanakan kunjungan Anda atau hubungi kami langsung lewat
                         WhatsApp.
@@ -292,12 +292,12 @@
             </div>
             <div class="footer-links">
                 <h4>Jelajahi</h4>
-                <a href="#companies">Our Company</a>
-                <a href="#services">Services</a>
-                <a href="#about">About Us</a>
-                <a href="#team">Our Team</a>
-                <a href="#gallery">Media &amp; Gallery</a>
-                <a href="#contact">Contact</a>
+                <a href="#companies">Perusahaan Kami</a>
+                <a href="#services">Layanan</a>
+                <a href="#about">Tentang Kami</a>
+                <a href="#team">Tim Kami</a>
+                <a href="#gallery">Media &amp; Galeri</a>
+                <a href="#contact">Kontak</a>
             </div>
             <div class="footer-links">
                 <h4>Perusahaan</h4>
@@ -309,7 +309,7 @@
         </div>
         <div class="container footer-bottom">
             <span>© <span id="footer-year"></span>
-                <span id="footer-copyright-name"></span>. All rights reserved.</span>
+                <span id="footer-copyright-name"></span>. Hak cipta dilindungi.</span>
             <!-- <span>Made with Kusuma Agro in Batu City</span> -->
         </div>
     </footer>

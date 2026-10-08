@@ -273,7 +273,7 @@ XAMPP di PC ini cuma punya PHP 7.4 bawaan, sementara kedua project CI4 itu butuh
    ```
    (DocumentRoot ke ROOT project, CI3 tidak punya folder `public/`.)
 3. Database: ikuti bagian 4a (import snapshot lengkap, JANGAN jalankan migrasi satu-satu kecuali snapshot hilang — lihat cadangan urutan migrasi di bagian 7).
-4. Restart Apache. Test: `curl http://kusuma-agro-backend.test/index.php/api/packages` harus balikin JSON.
+4. Restart Apache. Test: `curl http://localhost/web-corporate/kusuma-agro-backend/public/index.php/api/packages` harus balikin JSON.
 
 **Login**: pakai akun di tabel `admins` bersama (saat ini `kag_admin` atau `admin` — lihat bagian 3), via `POST /api/auth/login` atau lewat `Login.html`. Akun test `reviewer` sudah dihapus 17 Sep 2026.
 
@@ -501,8 +501,8 @@ CREATE TABLE api_tokens (
 
 ```bash
 # 1. kusuma-agro-backend
-curl http://kusuma-agro-backend.test/index.php/api/packages
-curl -X POST http://kusuma-agro-backend.test/index.php/api/packages -d "nama=test"   # harus 401
+curl http://localhost/web-corporate/kusuma-agro-backend/public/index.php/api/packages
+curl -X POST http://localhost/web-corporate/kusuma-agro-backend/public/index.php/api/packages -d "nama=test"   # harus 401
 
 # 2. kusuma-id-admin
 curl http://kusuma-id-admin.test/
@@ -513,7 +513,7 @@ curl http://kusuma-industri.test/
 curl -X POST http://kusuma-industri.test/admin/marketplace/store -d "nama=test"   # harus ditolak (403 CSRF atau 401)
 
 # 4. login test (ambil token dari kusuma-agro-backend, verifikasi diterima kusuma-id-admin)
-curl -X POST http://kusuma-agro-backend.test/index.php/api/auth/login \
+curl -X POST http://localhost/web-corporate/kusuma-agro-backend/public/index.php/api/auth/login \
   -H "Content-Type: application/json" -d '{"username":"USERNAME_ADMIN","password":"PASSWORD_ADMIN"}'
 ```
 

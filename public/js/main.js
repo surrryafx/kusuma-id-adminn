@@ -190,7 +190,7 @@
         <p>${esc(s.subtitle)}</p>
         <div class="hero-cta">
           <a href="${esc(s.ctaLink || "#companies")}" class="btn btn-primary">${esc(s.ctaText || "Selengkapnya")} ${svg("arrow", 'width="18" height="18"')}</a>
-          <a href="#contact" class="btn btn-ghost">Contact Us</a>
+          <a href="#contact" class="btn btn-ghost">Hubungi Kami</a>
         </div>
       </div>
     </div>`,
